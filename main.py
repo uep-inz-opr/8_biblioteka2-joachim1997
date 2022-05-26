@@ -1,13 +1,12 @@
 class Biblioteka:
     limit_wypozyczen = 20
-    ksiazki = []
     egzemplarze = []
     czytelnicy = []
     
     def dostepne_egz(self, tytul):
         dostepne_egz = []
         for egzemplarz in self.egzemplarze:
-            if egzemplarz.ksiazka.tytul == tytul:
+            if egzemplarz.tytul == tytul:
                 if egzemplarz.wypozyczony == False:
                     dostepne_egz.append(egzemplarz)
         return dostepne_egz
@@ -27,7 +26,7 @@ class Biblioteka:
             return False
 
         for egzemplarz in self.egzemplarze:
-            if egzemplarz.ksiazka.tytul == tytul:
+            if egzemplarz.tytul == tytul:
                 if egzemplarz.wypozyczony == nazwisko:
                     return False
 
@@ -40,6 +39,7 @@ class Biblioteka:
 
     def oddaj(self, nazwisko, tytul):
         czytelnik_w_bazie = False
+
         for czytelnik in self.czytelnicy:
             if czytelnik.nazwisko == nazwisko:
                 czytelnik_w_bazie = czytelnik
@@ -47,10 +47,8 @@ class Biblioteka:
         if czytelnik_w_bazie == False:
             return False
 
-        oddawany_egzemplarz = False
-
         for egzemplarz in self.egzemplarze:
-            if egzemplarz.ksiazka.tytul == tytul and egzemplarz.wypozyczony == nazwisko:
+            if egzemplarz.tytul == tytul and egzemplarz.wypozyczony == nazwisko:
                 czytelnik_w_bazie.lista_wypozyczen.remove(egzemplarz)
                 egzemplarz.wypozyczony = False
                 return True
@@ -58,18 +56,7 @@ class Biblioteka:
         return False
 
     def dodaj_egzemplarz_ksiazki(self, tytul, autor, rok_wydania):
-        ksiazka_w_bazie = False
-        for ksiazka in self.ksiazki:
-            if ksiazka.tytul == tytul and ksiazka.autor == autor:
-                ksiazka_w_bazie = ksiazka
-
-        if ksiazka_w_bazie == False:
-            ksiazka_w_bazie = Ksiazka(tytul, autor)
-            self.ksiazki.append(ksiazka_w_bazie)
-
-        nowy_egzemplarz = Egzemplarz(rok_wydania, False, ksiazka_w_bazie)
-        
-        self.egzemplarze.append(nowy_egzemplarz)
+        self.egzemplarze.append(Egzemplarz(tytul, autor, rok_wydania, False))
 
         return True
 
@@ -84,10 +71,11 @@ class Ksiazka:
         self.autor = autor
 
 class Egzemplarz:
-    def __init__(self, rok_wydania, wypozyczony, ksiazka):
+    def __init__(self, tytul, autor, rok_wydania, wypozyczony):
+        self.tytul = tytul
+        self.autor = autor
         self.rok_wydania = rok_wydania
         self.wypozyczony = wypozyczony
-        self.ksiazka = ksiazka
 
 liczba_akcji = int(input())
 lista_akcji = [input() for akcja in range(liczba_akcji)]
