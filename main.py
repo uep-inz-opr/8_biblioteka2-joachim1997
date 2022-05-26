@@ -1,5 +1,5 @@
 class Biblioteka:
-    limit_wypozyczen =< 3
+    limit_wypozyczen = 3
     ksiazki = []
     egzemplarze = []
     czytelnicy = []
