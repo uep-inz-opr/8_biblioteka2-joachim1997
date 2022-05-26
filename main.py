@@ -1,5 +1,5 @@
 class Biblioteka:
-    limit_wypozyczen = 4
+    limit_wypozyczen = 3
     egzemplarze = []
     czytelnicy = []
     
@@ -25,14 +25,13 @@ class Biblioteka:
         if len(czytelnik_w_bazie.lista_wypozyczen) == self.limit_wypozyczen:
             return False
 
-        for egzemplarz in self.egzemplarze:
+        for egzemplarz in czytelnik_w_bazie.lista_wypozyczen:
             if egzemplarz.tytul == tytul:
-                if egzemplarz.wypozyczony == nazwisko:
-                    return False
+                return False
 
         for egzemplarz in self.dostepne_egz(tytul):
             czytelnik_w_bazie.lista_wypozyczen.append(egzemplarz)
-            egzemplarz.wypozyczony = nazwisko
+            egzemplarz.wypozyczony = True
             return True
         
         return False
@@ -47,10 +46,10 @@ class Biblioteka:
         if czytelnik_w_bazie == False:
             return False
 
-        for egzemplarz in self.egzemplarze:
-            if egzemplarz.tytul == tytul and egzemplarz.wypozyczony == nazwisko:
-                czytelnik_w_bazie.lista_wypozyczen.remove(egzemplarz)
+        for egzemplarz in czytelnik_w_bazie.lista_wypozyczen:
+            if egzemplarz.tytul == tytul:
                 egzemplarz.wypozyczony = False
+                czytelnik_w_bazie.lista_wypozyczen.remove(egzemplarz)
                 return True
         
         return False
@@ -78,15 +77,15 @@ class Egzemplarz:
         self.wypozyczony = wypozyczony
 
 liczba_akcji = int(input())
-lista_akcji = [input() for akcja in range(liczba_akcji)]
+lista_akcji = [input().strip(' ') for akcja in range(liczba_akcji)]
 biblioteka = Biblioteka()
 
 for akcja in lista_akcji:
-    dzialania = akcja.replace(' ', '').replace('(', '').replace(')', '').replace('"', '').replace('\'', '').split(",")
+    dzialania = akcja.replace('(', '').replace(')', '').replace('"', '').replace('\'', '').split(",")
     dzialanie = dzialania[0]
-    if dzialanie == 'dodaj':
-        print(biblioteka.dodaj_egzemplarz_ksiazki(dzialania[1],dzialania[2],dzialania[3]))
-    if dzialanie == 'oddaj':
-        print(biblioteka.oddaj(dzialania[1],dzialania[2]))
-    if dzialanie == 'wypozycz':
-        print(biblioteka.wypozycz(dzialania[1],dzialania[2]))
+    if dzialanie.strip() == 'dodaj':
+        print(biblioteka.dodaj_egzemplarz_ksiazki(dzialania[1].strip(),dzialania[2].strip(),dzialania[3].strip()))
+    if dzialanie.strip() == 'oddaj':
+        print(biblioteka.oddaj(dzialania[1].strip(),dzialania[2].strip()))
+    if dzialanie.strip() == 'wypozycz':
+        print(biblioteka.wypozycz(dzialania[1].strip(),dzialania[2].strip()))
