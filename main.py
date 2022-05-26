@@ -39,6 +39,7 @@ class Biblioteka:
         return False
 
     def oddaj(self, nazwisko, tytul):
+        czytelnik_w_bazie == False
         for czytelnik in self.czytelnicy:
             if czytelnik.nazwisko == nazwisko:
                 czytelnik_w_bazie = czytelnik
